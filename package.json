@@ -1,6 +1,6 @@
 {
-  "name": "modulename",
-  "description": "modulename",
+  "name": "mongoosemigrate",
+  "description": "mongoosemigrate",
   "version": "0.0.1",
   "author": {
     "name": "Anthony McCormick",
@@ -17,13 +17,13 @@
     "node": ">=0.6.19"
   },
   "bugs": {
-    "url": "https://github.com/mccormicka/modulename/issues"
+    "url": "https://github.com/mccormicka/mongoosemigrate/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mccormicka/modulename"
+    "url": "https://github.com/mccormicka/mongoosemigrate"
   },
-  "homepage": "https://github.com/mccormicka/modulename",
+  "homepage": "https://github.com/mccormicka/mongoosemigrate",
   "readmeFilename": "README.md",
   "dependencies": {
     "nodelogger": "https://github.com/mccormicka/nodelogger/archive/master.tar.gz",

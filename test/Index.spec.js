@@ -2,7 +2,7 @@
 
 describe('SHOULD', function () {
 
-    var mockgoose = require('Mockgoose');
+    var mockgoose = require('mockgoose');
     var Mongoose = require('mongoose').Mongoose;
     var MongooseMigrate = require('../index');
     var mongoose;
@@ -15,10 +15,10 @@ describe('SHOULD', function () {
             host: 'localhost',
             db: 'mongoose-migrate-test'
         });
+
         migrate.migrateDatabaseDown(function () {
             migrate.migrateDatabaseUp(done);
         });
-
     });
 
     afterEach(function (done) {
@@ -62,24 +62,47 @@ describe('SHOULD', function () {
         }
     });
 
-    it('Items should be run in order', function (done) {
-        var Migrations = mongoose.model('Migrations');
+    it('Items should be run in order UP', function (done) {
         var one = require('./migrations/0001-testclass.migration');
         var two = require('./migrations/0002-testclass.migration');
         var oneCalled = false;
         var twoCalled = false;
-        spyOn(one, 'up').andCallFake(function(db, done){
+        spyOn(one, 'up').andCallFake(function (db, done) {
             expect(twoCalled).toBe(false);
             oneCalled = true;
             done();
         });
-        spyOn(two, 'up').andCallFake(function(db, done){
+        spyOn(two, 'up').andCallFake(function (db, done) {
             expect(oneCalled).toBe(true);
             twoCalled = true;
             done();
         });
         migrate.migrateDatabaseDown(function () {
             migrate.migrateDatabaseUp(function () {
+                done();
+            });
+        });
+    });
+
+    it('Items should be run in order DOWN', function (done) {
+
+        migrate.migrateDatabaseUp(function () {
+
+            var one = require('./migrations/0001-testclass.migration');
+            var two = require('./migrations/0002-testclass.migration');
+            var oneCalled = false;
+            var twoCalled = false;
+            spyOn(one, 'down').andCallFake(function (db, done) {
+                expect(twoCalled).toBe(true);
+                oneCalled = true;
+                done();
+            });
+            spyOn(two, 'down').andCallFake(function (db, done) {
+                expect(oneCalled).toBe(false);
+                twoCalled = true;
+                done();
+            });
+            migrate.migrateDatabaseDown(function () {
                 done();
             });
         });
@@ -105,7 +128,7 @@ describe('SHOULD', function () {
 
     it('Should not load files that do not match the glob pattern', function (done) {
         var Migrations = mongoose.model('Migrations');
-        Migrations.count(function(err, count){
+        Migrations.count(function (err, count) {
             expect(err).toBeNull();
             expect(count).toBe(2);
             done(err);
