@@ -1,0 +1,6 @@
+{
+    "host": "localhost2",
+    "db": "mongoose-migrate-test",
+    "port": 27018,
+    "migrations": "./**/*.migration2.js"
+}

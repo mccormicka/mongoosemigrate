@@ -10,7 +10,7 @@ describe('SHOULD', function () {
 
     beforeEach(function (done) {
         mongoose = new Mongoose();
-//        mockgoose(mongoose);
+        mockgoose(mongoose);
         migrate = new MongooseMigrate(mongoose, {
             host: 'localhost',
             db: 'mongoose-migrate-test'
@@ -64,21 +64,25 @@ describe('SHOULD', function () {
 
     it('Items should be run in order', function (done) {
         var Migrations = mongoose.model('Migrations');
-        expect(Migrations).toBeDefined();
-        if (Migrations) {
-            Migrations.find({}, {}, {sort: {index: -1}}, function (err, results) {
-                expect(err).toBeNull();
-                expect(results).toBeDefined();
-                if (results) {
-                    expect(results[0].index > results[1].index).toBe(true);
-                    done(err);
-                } else {
-                    done('Error retrieving migrations');
-                }
+        var one = require('./migrations/0001-testclass.migration');
+        var two = require('./migrations/0002-testclass.migration');
+        var oneCalled = false;
+        var twoCalled = false;
+        spyOn(one, 'up').andCallFake(function(db, done){
+            expect(twoCalled).toBe(false);
+            oneCalled = true;
+            done();
+        });
+        spyOn(two, 'up').andCallFake(function(db, done){
+            expect(oneCalled).toBe(true);
+            twoCalled = true;
+            done();
+        });
+        migrate.migrateDatabaseDown(function () {
+            migrate.migrateDatabaseUp(function () {
+                done();
             });
-        } else {
-            done('Error creating migrations model');
-        }
+        });
     });
 
     it('Tear down migrations', function (done) {
