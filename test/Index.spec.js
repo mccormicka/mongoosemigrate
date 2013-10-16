@@ -1,6 +1,6 @@
 'use strict';
 
-describe('SHOULD', function () {
+describe('MongooseMigrate Tests', function () {
 
     var mockgoose = require('mockgoose');
     var Mongoose = require('mongoose').Mongoose;
