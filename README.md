@@ -161,5 +161,8 @@ any of these values can be overridden by passing an optional configuration objec
 
 ###CHANGELOG
 
+####0.0.2
+Added -Drop option to enable dropping of an entire database instead of having to migrate-down
+
 ####0.0.1
 Initial Commit
